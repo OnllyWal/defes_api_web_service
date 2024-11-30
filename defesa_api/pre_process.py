@@ -1,5 +1,5 @@
 import re
-from defesa.doc_process import process_documents
+from doc_process import process_documents
 
 def subject(string):
     match = re.search(r"From:\s*(.+)\n.*Subject:\s*(.+)", string, re.IGNORECASE)
@@ -61,7 +61,7 @@ def start_doc_process(string):
                 word_dict["numero_dia"], numero_mes, word_dict["numero_ano"] = match.groups()
                 word_dict["nome_mes"] = obter_nome_mes(numero_mes)
             else:
-                word_dict[chave] = match.group(1).strip()
+                word_dict[chave] = match.group(2).strip() if len(match.groups()) > 1 else match.group(1).strip()
     
     doc_list = process_documents(word_dict)
     return doc_list
