@@ -1,6 +1,6 @@
 import requests
 import json
-from defesa_api.pre_process import start_doc_process
+from defesa_api.pre_process import start_doc_process, txt_edit_6lines
 from defesa_api.text_chamado import text_chamado
 
 def get_emails(endpoint_url):
@@ -31,17 +31,19 @@ def post_anexos(anexos, upload_url):
 
 def process_email(email):
     # Manipula os dados recebidos conforme a necessidade
-    txt = email['corpo']
-    docs = start_doc_process(txt)
+    txt = txt_edit_6lines(email['corpo'])
+    docs = start_doc_process(email, txt)
     urls = post_anexos(docs, upload_url="http://172.19.113.12:5000/upload")
     chamado = text_chamado(txt)
-    id = email['id']
+    id = int(email['id'])
 
     email['corpo'] = f"{chamado} \n Atenciosamente, \n Equipe PPComp"
     email['anexos'] = urls
     email['status'] = "Processado"
+    print(email)
+    
     return email, id
 
-def update_email(email, url,id):
+def update_email(email,id):
     response = requests.put(f"http://172.19.113.12:5000/emails/{id}", json=email)
     print(response.json)

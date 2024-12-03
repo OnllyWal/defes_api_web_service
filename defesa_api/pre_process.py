@@ -1,5 +1,5 @@
 import re
-from doc_process import process_documents
+from defesa_api.doc_process import process_documents
 
 def subject(string):
     match = re.search(r"From:\s*(.+)\n.*Subject:\s*(.+)", string, re.IGNORECASE)
@@ -18,11 +18,20 @@ def extrair_nome_email(from_texto):
     else:
         # Caso não esteja no formato Nome <email>, retorna o texto original
         return from_texto, None
+    
 
-def start_doc_process(string):
+def txt_edit_6lines(txt):
+    linhas = txt.splitlines()
+    novas_linhas = linhas[8:]
+    novo_texto = "\n".join(novas_linhas)
+    return novo_texto
+
+def start_doc_process(email, txt):
+    destino = email['origin_address']
+
     # Inicializa o dicionário com valores padrão
     word_dict = {
-        "de":"",
+        "destino": destino,
         "nome_coordenador": "Francisco de Assis Boldt",
         "numero_dia": "",
         "nome_mes": "",
@@ -40,22 +49,23 @@ def start_doc_process(string):
 
     # Define expressões regulares para capturar os valores
     padroes = {
-        "de": r"From:\s*(.+)",
-        "nome_completo_aluno": r"(Aluno|Nome Completo Aluno:)\s*(.+)",
+        "nome_completo_aluno": r"(Aluno:|Nome Completo Aluno:)\s*(.+)",
         "titulo_tese": r"Título:\s*(.+)",
         "data": r"Data:\s*(\d{2})/(\d{2})/(\d{4})",
         "numero_hora": r"Horário:\s*(\d{2}:\d{2})",
         "numero_sala": r"Sala:\s*(.+)",
-        "link_sala": r"(Link Sala Virtual|Link da video chamada:)\s*(.+)",
+        "link_sala": r"(Link Sala Virtual:|Link da videochamada:)\s*(.+)",
         "nome_orientador1": r"(Orientador:|Orientador Principal)\s*(.+)",
         "nome_orientador2": r"Coorientador:\s*(.+)",
         "nome_membro_interno": r"(Membro Interno:|Avaliador Interno:)\s*(.+)",
-        "nome_membro_externo": r"(Membro Externo|Avaliador Interno:)\s*(.+)"
+        "nome_membro_externo": r"(Membro Externo:|Avaliador Externo:)\s*(.+)"
     }
 
     # Captura os valores com base nos padrões
+    txt = txt_edit_6lines(txt)
+    
     for chave, padrao in padroes.items():
-        match = re.search(padrao, string)
+        match = re.search(padrao, txt)
         if match:
             if chave == "data":  # Processa a data separadamente
                 word_dict["numero_dia"], numero_mes, word_dict["numero_ano"] = match.groups()

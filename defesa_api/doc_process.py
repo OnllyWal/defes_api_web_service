@@ -36,8 +36,8 @@ def remove_docs(documentos: list[str]):
 def process_documents(word_dict):
     
     #Caminhos Pastas
-    input_dir = "/home/wal/ProcessAutomation/ISOEmailAPI/defesa/input"  # Substitua pelo caminho da pasta de entrada
-    output_dir = "/home/wal/ProcessAutomation/ISOEmailAPI/defesa/output"  # Substitua pelo caminho da pasta de saída
+    input_dir = "/home/wal/defes_api_web_service/defesa_api/input"  # Substitua pelo caminho da pasta de entrada
+    output_dir = "/home/wal/defes_api_web_service/defesa_api/output"  # Substitua pelo caminho da pasta de saída
 
     # Verificar se a pasta de saída existe, caso contrário, cria
     os.makedirs(output_dir, exist_ok=True)
