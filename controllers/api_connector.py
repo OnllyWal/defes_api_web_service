@@ -1,5 +1,5 @@
 import requests
-import json
+import os
 from defesa_api.pre_process import start_doc_process, txt_edit_6lines
 from defesa_api.text_chamado import text_chamado
 
@@ -47,3 +47,11 @@ def process_email(email):
 def update_email(email,id):
     response = requests.put(f"http://172.19.113.12:5000/emails/{id}", json=email)
     print(response.json)
+    remove_docs("/home/wal/defes_api_web_service/defesa_api/output")
+
+def remove_docs(path):
+    for arq in os.listdir(path):
+        arq_path = os.path.join(path, arq)
+
+        if os.path.isfile(arq_path):
+            os.remove(arq_path)

@@ -54,14 +54,14 @@ def process_documents(word_dict):
             # Substituir as palavras conforme o dicionário
             replace_words_in_document(doc, word_dict)
 
-            if filename == "Modelo Ata de Defesa.docx":
+            if filename == "Modelo_Ata_de_Defesa.docx":
                 local_dict = {"resultado":"APROVADO"}
                 replace_words_in_document(doc, local_dict)
                 approved_filename = f"{os.path.splitext(os.path.basename(output_path))[0]}_APROVADO.docx"
                 approved_path = os.path.join(output_dir, approved_filename)
                 doc.save(approved_path)
 
-                local_dict = {"APROVADO":"REPROVADO"}
+                local_dict = {"resultado":"REPROVADO"}
                 replace_words_in_document(doc, local_dict)
                 repproved_filename = f"{os.path.splitext(os.path.basename(output_path))[0]}_REPROVADO.docx"
                 repproved_path = os.path.join(output_dir, repproved_filename)

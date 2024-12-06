@@ -11,7 +11,7 @@ def main():
         emails = get_emails(endpoint_url)
         if emails:
             for email in emails:
-                if email['status'] == "Armazenado":
+                if (email['tipo'] == "Defesa") and (email['status'] == "Categorizado"):
                     #print(email)
                     print(f"{len(emails)} emails recebidos. Processando...")
                     email, id = process_email(email)
